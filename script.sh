@@ -94,6 +94,7 @@ install_php() {
     if [ "$VERSION_ID" = "12.04" ] || [ "$VERSION_ID" = "14.04" ] || [ "$VERSION_ID" = "15.04" ]; then
         PHP_VERSION="5"
     fi
+
     #
     # Is PHP7?
     if [ "$VERSION_ID" = "16.04" ] || [ "$VERSION_ID" = "16.10" ] || [ "$VERSION_ID" = "17.04" ] || [ "$VERSION_ID" = "17.10" ]; then
@@ -153,15 +154,18 @@ install_php() {
 ##
 install_mysql() {
     #
-	# install mariadb
-	#
-	debconf-set-selections <<< "mariadb-server-10.0 mysql-server/root_password password $rootdbpass"
-	debconf-set-selections <<< "mariadb-server-10.0 mysql-server/root_password_again password $rootdbpass"
-	#
+    # install mariadb
+    #
+    debconf-set-selections <<< "mariadb-server-10.0 mysql-server/root_password password $rootdbpass"
+    debconf-set-selections <<< "mariadb-server-10.0 mysql-server/root_password_again password $rootdbpass"
+    
+    #
     apt -yqq install mariadb-server
-	apt -yqq install mariadb-client
+    apt -yqq install mariadb-client
+    
     #
     sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mariadb.conf.d/50-server.cnf
+    
     #
     service mysql start
 
@@ -211,30 +215,26 @@ main() {
     #
     start_install
 
-    #NAME="Ubuntu"
-    #VERSION="16.04.7 LTS (Xenial Xerus)"
-    #ID=ubuntu
-    #ID_LIKE=debian
-    #PRETTY_NAME="Ubuntu 16.04.7 LTS"
-    #VERSION_ID="16.04"
-    #HOME_URL="http://www.ubuntu.com/"
-    #SUPPORT_URL="http://help.ubuntu.com/"
-    #BUG_REPORT_URL="http://bugs.launchpad.net/ubuntu/"
-    #VERSION_CODENAME=xenial
-    #UBUNTU_CODENAME=xenial
-    #. /etc/os-release
-
     #
-    #update_system
+    update_system
     
     #
-    #install_base_system
+    install_base_system
 
     #
-    #setup_environment
+    define_passwords
 
     #
-    #install_nvm
+    install_apache
+    
+    #
+    install_php
+    
+    #
+    install_adminer
+    
+    #
+    install_mysql
 
     echo >&2 "LAMP install completed"
 
