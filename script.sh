@@ -84,7 +84,8 @@ install_apache() {
 ##
 install_adminer() {
     #
-    wget http://www.adminer.org/latest.php -O /var/www/html/index.php
+    wget http://www.adminer.org/latest.php -O /var/www/html/adminer.php
+    chown www-data:www-data /var/www/html/index.php
 }
 
 #
@@ -191,6 +192,8 @@ change_php_ini() {
     sed -i 's/upload_max_filesize\s*=.*/upload_max_filesize = 128M/g' /etc/php/$PHP_VERSION/apache2/php.ini
 
     sed -i 's/max_file_uploads\s*=.*/max_file_uploads = 5/g' /etc/php/$PHP_VERSION/apache2/php.ini
+
+    sed -i 's/upload_tmp_dir\s*=.*/upload_tmp_dir = \/tmp\/php-uploads/g' /etc/php/$PHP_VERSION/apache2/php.ini
 }
 
 #
