@@ -168,6 +168,12 @@ install_php() {
 
         sed -i 's/max_execution_time\s*=.*/max_execution_time = 300/g' /etc/php/7.4/apache2/php.ini
 
+        sed -i 's/post_max_size\s*=.*/post_max_size = 128M/g' /etc/php/7.4/apache2/php.ini
+
+        sed -i 's/upload_max_filesize\s*=.*/upload_max_filesize = 128M/g' /etc/php/7.4/apache2/php.ini
+
+        sed -i 's/max_file_uploads\s*=.*/max_file_uploads = 5/g' /etc/php/7.4/apache2/php.ini
+
         #
         service apache2 restart
     fi
