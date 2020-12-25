@@ -21,9 +21,6 @@ install_base_system() {
     #
     apt -yqq install ca-certificates build-essential net-tools curl wget lsb-release procps 2>&1
     apt -yqq install perl unzip git nano htop iftop mariadb-client 2>&1
-    #
-    apt-get autoremove -y && apt-get autoclean -y && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 }
 
 #
@@ -65,13 +62,16 @@ dbpass=\"$dbpass\"
 #
 ##
 install_apache() {
-    # Apache2 and Utils
+    # apache2 and Utils
     apt -yqq install apache2 apache2-utils
+
     # enable apache modules
     a2enmod headers
     a2enmod rewrite
 
+    #
     awk '/<Directory \/var\/www\/>/,/AllowOverride None/{sub("None", "All",$0)}{print}' /etc/apache2/apache2.conf > tmp.conf && mv tmp.conf /etc/apache2/apache2.conf
+    
     #
     service apache2 restart
 
@@ -89,32 +89,29 @@ install_adminer() {
 #
 ##
 install_php() {
-
-    # Is PHP5?
+    # is PHP5
     if [ "$VERSION_ID" = "12.04" ] || [ "$VERSION_ID" = "14.04" ] || [ "$VERSION_ID" = "15.04" ]; then
         PHP_VERSION="5"
     fi
 
-    #
-    # Is PHP7?
+    # is PHP7
     if [ "$VERSION_ID" = "16.04" ] || [ "$VERSION_ID" = "16.10" ] || [ "$VERSION_ID" = "17.04" ] || [ "$VERSION_ID" = "17.10" ]; then
         PHP_VERSION="7.0"
     fi
-        
-    #
-    # Is PHP7.2?
+
+    # is PHP7.2
     if [ "$VERSION_ID" = "18.04" ] || [ "$VERSION_ID" = "18.10" ]; then
         PHP_VERSION="7.2"
     fi
 
-    #
-    # Is PHP7.4?
+    # is PHP7.4
     if [ "$VERSION_ID" = "20.04" ] || [ "$VERSION_ID" = "20.10" ]; then
         PHP_VERSION="7.4"
     fi
 
     #
-    # Install PHP5
+
+    # install PHP5
     if [ "$PHP_VERSION" = "5" ]; then
         #
         echo "Installing PHP$PHP_VERSION"
@@ -127,8 +124,7 @@ install_php() {
         php5enmod mcrypt
     fi
 
-    #
-    # Install PHP7
+    # install PHP7
     if [ "$PHP_VERSION" = "7.0" ]; then
         #
         echo "Installing PHP$PHP_VERSION"
@@ -137,9 +133,8 @@ install_php() {
         #
         apt -yqq install libapache2-mod-php$PHP_VERSION
     fi
-        
-    #
-    # Install PHP[7.2|7.4]
+
+    # install PHP[7.2|7.4]
     if [ "$PHP_VERSION" = "7.2" ] || [ "$PHP_VERSION" = "7.4" ]; then
         #
         echo "Installing PHP$PHP_VERSION"
@@ -153,8 +148,6 @@ install_php() {
 #
 ##
 install_mysql() {
-    #
-    # install mariadb
     #
     debconf-set-selections <<< "mariadb-server-10.0 mysql-server/root_password password $rootdbpass"
     debconf-set-selections <<< "mariadb-server-10.0 mysql-server/root_password_again password $rootdbpass"
@@ -187,13 +180,13 @@ start_install(){
     #
     . /etc/os-release
 
-    # Check is root user
+    # check is root user
     if [[ $EUID -ne 0 ]]; then
         echo "You must be root user to install scripts."
         sudo su
     fi
 
-    # Check is root user
+    # check is root user
     if [[ $ID != "ubuntu" ]]; then
         echo "Wrong OS! Sorry only Ubuntu is supported."
         exit 1
@@ -204,8 +197,14 @@ start_install(){
 }
 
 end_install(){
+    # clean up apt
+    apt-get autoremove -y && apt-get autoclean -y && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+    # return to dialog
     export DEBIAN_FRONTEND=dialog
 
+    # remove script
     rm -f script.sh
 }
 
