@@ -135,14 +135,24 @@ install_php() {
         apt -yqq install libapache2-mod-php$PHP_VERSION
     fi
 
-    # install PHP[7.2|7.4]
+    # install PHP[7.2]
     if [ "$PHP_VERSION" = "7.2" ] || [ "$PHP_VERSION" = "7.4" ]; then
         #
         echo "Installing PHP$PHP_VERSION"
         apt -yqq install php$PHP_VERSION php$PHP_VERSION-cli
-        apt -yqq install php$PHP_VERSION-{mbstring,curl,gd,json,xml,mysql,sqlite,sqlite3,opcache,zip}
+        apt -yqq install php$PHP_VERSION-{mbstring,curl,gd,json,xml,mysql,sqlite3,opcache,zip}
         #
         apt -yqq install libapache2-mod-php$PHP_VERSION
+    fi
+
+    # install PHP[7.4]
+    if [ "$PHP_VERSION" = "7.4" ]; then
+        #
+        echo "Installing PHP"
+        apt -yqq install php php-cli
+        apt -yqq install php-{common,bz2,getid3,imagick,intl,mbstring,curl,gd,json,xml,mysql,sqlite3,opcache,zip}
+        #
+        apt -yqq install libapache2-mod-php
     fi
 }
 
