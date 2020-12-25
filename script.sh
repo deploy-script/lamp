@@ -35,20 +35,21 @@ define_passwords() {
         dbuser="app"
         dbpass=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 
-        echo "# Deploy Script - Credentials file
+        echo "#
+# Deploy Script - Credentials file
 #
 # Database
 #
-# Root user password:
+# Root user password
 rootdbpass=\"$rootdbpass\"
 #
-# Database Name:
+# Database Name
 dbname=\"$dbname\"
 #
-# Database User:
+# Database User
 dbuser=\"$dbuser\"
 #
-# Database Password:
+# Database Password
 dbpass=\"$dbpass\"
 " > /root/passwords.txt
     else
