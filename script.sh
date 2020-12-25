@@ -234,13 +234,14 @@ start_install(){
         sudo su
     fi
 
-    # check is root user
+    # check os is ubuntu
     if [[ $ID != "ubuntu" ]]; then
         echo "Wrong OS! Sorry only Ubuntu is supported."
         exit 1
     fi
 
     export DEBIAN_FRONTEND=noninteractive
+
     echo >&2 "Deploy-Script: [OS] $PRETTY_NAME"
 }
 
