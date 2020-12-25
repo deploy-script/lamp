@@ -123,6 +123,9 @@ install_php() {
         #
         # enable mods
         php5enmod mcrypt
+
+        #
+        service apache2 restart
     fi
 
     # install PHP7
@@ -133,6 +136,9 @@ install_php() {
         apt -yqq install php$PHP_VERSION-{mbstring,curl,gd,mcrypt,json,xml,mysql,sqlite}
         #
         apt -yqq install libapache2-mod-php$PHP_VERSION
+
+        #
+        service apache2 restart
     fi
 
     # install PHP[7.2]
@@ -143,6 +149,9 @@ install_php() {
         apt -yqq install php$PHP_VERSION-{mbstring,curl,gd,json,xml,mysql,sqlite3,opcache,zip}
         #
         apt -yqq install libapache2-mod-php$PHP_VERSION
+
+        #
+        service apache2 restart
     fi
 
     # install PHP[7.4]
@@ -153,6 +162,9 @@ install_php() {
         apt -yqq install php-{common,bz2,getid3,imagick,intl,mbstring,curl,gd,json,xml,mysql,sqlite3,opcache,zip}
         #
         apt -yqq install libapache2-mod-php
+
+        #
+        service apache2 restart
     fi
 }
 
