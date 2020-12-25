@@ -284,9 +284,10 @@ main() {
     #
     install_mysql
 
-    echo >&2 "LAMP install completed"
-
+    #
     end_install
+
+    echo >&2 "LAMP install completed - Database user and passwords are in /root/passwords.txt"
 }
 
 main
