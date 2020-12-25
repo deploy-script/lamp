@@ -164,6 +164,11 @@ install_php() {
         apt -yqq install libapache2-mod-php
 
         #
+        sed -i 's/memory_limit\s*=.*/memory_limit = 1024M/g' /etc/php/7.4/apache2/php.ini
+
+        sed -i 's/max_execution_time\s*=.*/max_execution_time = 300/g' /etc/php/7.4/apache2/php.ini
+
+        #
         service apache2 restart
     fi
 }
